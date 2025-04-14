@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Sky Stone 投料助手（网页版）</title>
+    <style>
+        body { font-family: "Microsoft YaHei", sans-serif; padding: 20px; }
+        label, input { font-size: 18px; display: block; margin-top: 10px; }
+        button { margin-top: 20px; font-size: 18px; padding: 10px 20px; }
+        .output { margin-top: 20px; font-size: 18px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Sky Stone 投料助手（网页版）</h2>
+    <label for="ph">pH 值：</label>
+    <input type="number" id="ph" step="0.01" placeholder="例如 6.9">
+    <label for="nh3">氨氮 NH₃ (mg/L)：</label>
+    <input type="number" id="nh3" step="0.01" placeholder="例如 0.8">
+    <label for="no2">亚硝酸盐 NO₂ (mg/L)：</label>
+    <input type="number" id="no2" step="0.01" placeholder="例如 0.2">
+    <button onclick="calculate()">生成投料建议</button>
+    <div class="output" id="result"></div>
+    <script>
+        function calculate() {
+            const ph = parseFloat(document.getElementById("ph").value);
+            const nh3 = parseFloat(document.getElementById("nh3").value);
+            const no2 = parseFloat(document.getElementById("no2").value);
+            let result = "";
+            if (isNaN(ph) || isNaN(nh3) || isNaN(no2)) {
+                result = "请输入所有数值。";
+            } else if (nh3 > 1 || no2 > 1 || ph > 8.5 || ph < 6.5) {
+                result = "建议暂停投料，检测水质异常。";
+            } else {
+                result = "建议正常投料。";
+            }
+            document.getElementById("result").innerText = result;
+        }
+    </script>
+</body>
+</html>
