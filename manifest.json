@@ -1,18 +1,21 @@
 
 {
   "name": "Sky Stone Feed",
-  "short_name": "Feed",
+  "short_name": "Sky Feed",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "description": "Sky Stone 投料建议助手",
-  "icons": [{
-    "src": "icon-192.png",
-    "type": "image/png",
-    "sizes": "192x192"
-  }, {
-    "src": "icon-512.png",
-    "type": "image/png",
-    "sizes": "512x512"
-  }]
+  "description": "离线支持，智能投料建议系统",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }

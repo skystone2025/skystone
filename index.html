@@ -1,68 +1,109 @@
 
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="manifest" href="manifest.json" />
-  <title>Sky Stone 投料建议助手</title>
-  <style>
-    body { font-family: "Microsoft YaHei", sans-serif; padding: 20px; line-height: 1.8; }
-    input { font-size: 16px; padding: 5px; margin-bottom: 10px; width: 100%; max-width: 300px; }
-    button { font-size: 16px; padding: 10px 20px; margin-top: 10px; }
-    .output { margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sky Stone 投料建议助手</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+        }
+        header {
+            background-color: #f1c40f;
+            color: #000;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .container {
+            padding: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 18px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 30px;
+            font-size: 16px;
+            border-top: 1px solid #aaa;
+            padding-top: 15px;
+        }
+        .risk-icon {
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-  <h2>Sky Stone 投料建议助手</h2>
-  <label>pH 值：<input id="ph" type="number" step="0.01"></label><br>
-  <label>氨氮 NH₃ (mg/L)：<input id="nh3" type="number" step="0.01"></label><br>
-  <label>亚硝酸盐 NO₂⁻ (mg/L)：<input id="no2" type="number" step="0.01"></label><br>
-  <label>水温 (℃)：<input id="temp" type="number" step="0.1"></label><br>
-  <button onclick="generate()">生成投料建议</button>
-  <div class="output" id="output"></div>
+    <header>Sky Stone 投料建议助手</header>
+    <div class="container">
+        <label>pH 值：</label>
+        <input type="number" step="0.01" id="ph">
+        <label>氨氮 NH₃ (mg/L)：</label>
+        <input type="number" step="0.01" id="nh3">
+        <label>亚硝酸盐 NO₂⁻ (mg/L)：</label>
+        <input type="number" step="0.01" id="no2">
+        <label>水温 (°C)：</label>
+        <input type="number" step="0.1" id="temp">
+        <button onclick="generate()">生成投料建议</button>
+        <div class="result" id="result"></div>
+    </div>
+    <script>
+        function generate() {
+            const ph = parseFloat(document.getElementById('ph').value);
+            const nh3 = parseFloat(document.getElementById('nh3').value);
+            const no2 = parseFloat(document.getElementById('no2').value);
+            const temp = parseFloat(document.getElementById('temp').value);
+            const now = new Date();
+            const timeStr = `时间：${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${now.getHours()}时${now.getMinutes()}分${now.getSeconds()}秒`;
 
-  <script>
-    function formatWeight(value) {
-      return value >= 1000 ? (value / 1000).toFixed(1) + " KG" : value + "g";
-    }
+            let msg = `<strong>【Sky Stone 投料建议】</strong><br>${timeStr}<br><br>`;
+            let risk = "✅ 正常";
+            if (nh3 >= 2 && nh3 < 4) {
+                msg += `• 氨氮 ${nh3} 偏高，建议加糖蜜 1500g，枯草芽孢杆菌 200g<br>`;
+                risk = "⚠️ 中度风险";
+            } else if (nh3 >= 4) {
+                msg += `• 氨氮 ${nh3} 严重偏高，建议加糖蜜 2000g，枯草芽孢杆菌 300g<br>`;
+                risk = "❗ 高度风险";
+            }
 
-    function generate() {
-      const ph = parseFloat(document.getElementById("ph").value);
-      const nh3 = parseFloat(document.getElementById("nh3").value);
-      const no2 = parseFloat(document.getElementById("no2").value);
-      const temp = parseFloat(document.getElementById("temp").value);
-      const now = new Date().toLocaleString("zh-CN", { hour12: false });
+            if (no2 >= 1 && no2 < 2) {
+                msg += `• 亚硝酸盐 ${no2} 偏高，建议加维生素C 100g<br>`;
+                risk = risk === "❗ 高度风险" ? risk : "⚠️ 中度风险";
+            } else if (no2 >= 2) {
+                msg += `• 亚硝酸盐 ${no2} 严重偏高，建议加维生素C 200g<br>`;
+                risk = "❗ 高度风险";
+            }
 
-      let output = `<strong>【Sky Stone 投料建议】</strong><br>时间：${now}<br><ul>`;
-      let risk = false;
+            if (temp >= 33) {
+                msg += `• 温度 ${temp}°C 偏高，建议加维生素C 100g 增强抗应激<br>`;
+                risk = risk === "❗ 高度风险" ? risk : "⚠️ 中度风险";
+            }
 
-      if (ph < 6.5) {
-        output += `<li>pH 偏低，建议加小苏打 ${formatWeight(5000)}</li>`;
-        risk = true;
-      }
-      if (nh3 > 2) {
-        output += `<li>氨氮 ${nh3} 偏高，建议加糖蜜 ${formatWeight(1500)}，枯草芽孢杆菌 ${formatWeight(200)}</li>`;
-        risk = true;
-      }
-      if (no2 > 1) {
-        output += `<li>亚硝酸盐 ${no2} 偏高，建议加维生素C ${formatWeight(100)}</li>`;
-        risk = true;
-      }
-      if (temp >= 33) {
-        output += `<li>温度 ${temp}°C 较高，建议加维生素C ${formatWeight(100)} 增强抗应激</li>`;
-        risk = true;
-      }
-      if (risk) {
-        output += `<li>存在中度应激风险，建议泼洒食盐 ${formatWeight(5000)} 稀释毒性</li>`;
-      }
-      if (!risk) {
-        output += `<li>水质良好，无需调整</li>`;
-      }
-
-      output += "</ul>";
-      document.getElementById("output").innerHTML = output;
-    }
-  </script>
+            msg = `<div class="risk-icon">${risk}</div><br>` + msg;
+            document.getElementById('result').innerHTML = msg;
+        }
+    </script>
 </body>
 </html>
