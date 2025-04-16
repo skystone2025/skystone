@@ -1,84 +1,60 @@
+
 <!DOCTYPE html>
 <html lang="zh">
 <head>
   <meta charset="UTF-8" />
-  <title>Sky Stone 投料助手（网页版）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sky Stone 投料建议助手</title>
+  <link rel="manifest" href="manifest.json" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('service-worker.js').then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+  </script>
   <style>
-    body {
-      font-family: "Microsoft YaHei", sans-serif;
-      background-color: #f9f9f9;
-      padding: 20px;
-    }
-    h2 {
-      color: #333;
-    }
-    label, input {
-      font-size: 18px;
-      display: block;
-      margin-top: 10px;
-    }
-    button {
-      margin-top: 20px;
-      font-size: 18px;
-      padding: 6px 12px;
-    }
-    .output {
-      margin-top: 20px;
-      padding: 10px;
-      background-color: #e0f0e0;
-      font-size: 18px;
-    }
-    .datetime {
-      font-size: 14px;
-      color: #666;
-      margin-top: 10px;
-    }
+    body { font-family: 'Microsoft YaHei', sans-serif; padding: 20px; }
+    header { background: #f1c40f; padding: 10px; text-align: center; font-weight: bold; }
+    label, input { display: block; margin-top: 10px; font-size: 1em; }
+    input { padding: 5px; width: 100%; }
+    button { margin-top: 15px; padding: 10px; font-size: 1em; background: #3498db; color: white; border: none; border-radius: 5px; }
+    #result { margin-top: 20px; padding: 10px; background: #ecf0f1; border-left: 5px solid #3498db; display: none; }
   </style>
 </head>
 <body>
-  <h2>Sky Stone 投料助手（网页版）</h2>
-
-  <label for="ph">pH 值：</label>
-  <input type="number" id="ph" step="0.01" placeholder="请输入 pH">
-
-  <label for="nh3">氨氮 NH₃ (mg/L)：</label>
-  <input type="number" id="nh3" step="0.01" placeholder="请输入氨氮">
-
-  <label for="no2">亚硝酸盐 NO₂ (mg/L)：</label>
-  <input type="number" id="no2" step="0.01" placeholder="请输入亚硝酸盐">
-
-  <button onclick="calculate()">生成投料建议</button>
-
-  <div class="output" id="result"></div>
-  <div class="datetime" id="current-datetime"></div>
-
+  <header>Sky Stone 投料建议助手</header>
+  <label>pH 值：</label><input id="ph" type="number" step="0.01" />
+  <label>氨氮 NH₃ (mg/L)：</label><input id="nh3" type="number" step="0.01" />
+  <label>亚硝酸盐 NO₂⁻ (mg/L)：</label><input id="no2" type="number" step="0.01" />
+  <label>水温 (℃)：</label><input id="temp" type="number" step="0.1" />
+  <button onclick="generateSuggestion()">生成投料建议</button>
+  <div id="result"></div>
   <script>
-    function calculate() {
-      const ph = parseFloat(document.getElementById("ph").value);
-      const nh3 = parseFloat(document.getElementById("nh3").value);
-      const no2 = parseFloat(document.getElementById("no2").value);
-      let result = "";
-
-      if (isNaN(ph) || isNaN(nh3) || isNaN(no2)) {
-        result = "请填写所有数值。";
-      } else {
-        result += "【投料建议】\n";
-        if (ph < 6.5 || ph > 8.5) result += "→ pH 异常，请检测碱度。\n";
-        if (nh3 > 1) result += "→ 氨氮偏高，请减少投喂量。\n";
-        if (no2 > 0.5) result += "→ 亚硝酸盐高，建议加速循环系统。\n";
-        if (result === "【投料建议】\n") result += "→ 水质正常，可正常投料。";
+    function generateSuggestion() {
+      const ph = parseFloat(document.getElementById('ph').value);
+      const nh3 = parseFloat(document.getElementById('nh3').value);
+      const no2 = parseFloat(document.getElementById('no2').value);
+      const temp = parseFloat(document.getElementById('temp').value);
+      if (isNaN(ph) || isNaN(nh3) || isNaN(no2) || isNaN(temp)) {
+        alert("请填写所有参数！");
+        return;
       }
-
-      document.getElementById("result").innerText = result;
+      let soda = ph < 7.0 ? 800 : 0;
+      let bacillus = nh3 > 1.5 ? 10 : 0;
+      let molasses = no2 > 0.5 ? 150 : 0;
+      const factor = temp < 24 ? 0.8 : 1;
+      soda = Math.round(soda * factor);
+      bacillus = Math.round(bacillus * factor);
+      molasses = Math.round(molasses * factor);
+      const resultText = `推荐投料：\n- 小苏打：${soda} 克\n- 芽孢杆菌：${bacillus} 克\n- 糖蜜：${molasses} ml`;
+      document.getElementById('result').innerText = resultText;
+      document.getElementById('result').style.display = "block";
     }
-
-    function updateDateTime() {
-      const now = new Date();
-      document.getElementById("current-datetime").innerText =
-        "当前时间：" + now.toLocaleString();
-    }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
   </script>
 </body>
 </html>
