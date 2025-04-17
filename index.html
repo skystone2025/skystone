@@ -1,74 +1,64 @@
+
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <title>Sky Stone Feed v3.4.2</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="manifest" href="manifest.json">
-  <title>Sky Stone Feed v3.4.2</title>
+  <link rel="icon" href="icon-192.png" sizes="192x192">
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #fff8dc; }
+    h2 { color: #222; }
+    input { font-size: 16px; padding: 4px; width: 100px; }
+    button { padding: 10px 20px; background: #3498db; color: white; border: none; margin-top: 10px; }
+    #output { margin-top: 20px; background: #f8f8f8; padding: 10px; border: 1px solid #ccc; }
+  </style>
 </head>
-<body style="font-family:'Microsoft YaHei',sans-serif;background:#fffce8;padding:20px">
-  <div style="text-align:right;color:#666;font-size:14px;">版本：v3.4.2</div>
-  <h2>Sky Stone 投料建议</h2>
-  <label>pH：<input type="number" step="0.1" id="ph" value="7.0"></label><br>
-  <label>氨氮 NH₃：<input type="number" step="0.1" id="nh3" value="2.0"></label><br>
-  <label>亚硝酸盐 NO₂⁻：<input type="number" step="0.1" id="no2" value="0.5"></label><br>
-  <label>水温 ℃：<input type="number" step="0.1" id="temp" value="28"></label><br><br>
-  <button onclick="generate()">生成投料建议</button>
-  <div id="output" style="margin-top:20px;font-size:16px;"></div>
+<body>
+  <h2>Sky Stone Feed v3.4.2</h2>
+  <div>
+    <label>pH 值: <input id="ph" value="7.0"></label><br>
+    <label>氨氮 NH₃: <input id="nh3" value="1"></label><br>
+    <label>亚硝酸盐 NO₂⁻: <input id="no2" value="0.1"></label><br>
+    <label>水温 ℃: <input id="temp" value="28"></label><br>
+    <button onclick="generate()">生成投料建议</button>
+  </div>
+  <div id="output"></div>
+  <script>
+    function generate() {
+      const ph = parseFloat(document.getElementById('ph').value);
+      const nh3 = parseFloat(document.getElementById('nh3').value);
+      const no2 = parseFloat(document.getElementById('no2').value);
+      const temp = parseFloat(document.getElementById('temp').value);
+      const now = new Date().toLocaleString();
 
-<script>
-function generate() {
-  const ph = parseFloat(document.getElementById("ph").value);
-  const nh3 = parseFloat(document.getElementById("nh3").value);
-  const no2 = parseFloat(document.getElementById("no2").value);
-  const temp = parseFloat(document.getElementById("temp").value);
+      let result = `【Sky Stone 投料建议】<br>时间：${now}<br>`;
+      let risk = "";
 
-  const time = new Date().toLocaleString('zh-CN');
-  let output = `【Sky Stone 投料建议】<br>时间：${time}<br><br>`;
-  let riskIcon = "✅ 正常";
+      if (ph > 8.5) {
+        result += "<br>❌ pH > 8.5，禁止投菌！建议换水50% + 投醋酸300ml/亩<br>";
+        document.getElementById('output').innerHTML = result;
+        return;
+      }
 
-  // pH 拦截
-  if (ph > 8.5) {
-    document.getElementById("output").innerHTML = `❗ 当前 pH=${ph}，禁止使用菌剂！<br>建议换水50% + 使用醋酸/磷酸调降至 <b>8.5</b> 以下。<br><br>处理ID：${genID()}`;
-    return;
-  }
+      if (no2 > 2) {
+        result += "⚠️ 亚硝酸盐偏高，建议维生素C 200g，48小时内禁用糖蜜<br>";
+      }
 
-  let factor = temp < 20 ? 0.5 : 1.0;
-  let result = "";
+      let molasses = nh3 * 150;
+      let bacillus = nh3 * 20;
 
-  if (nh3 > 2) {
-    result += `• 氨氮 ${nh3} 偏高 → 糖蜜 ${Math.round(nh3*300*factor)}g + 枯草芽孢杆菌 ${Math.round(nh3*40*factor)}g<br>`;
-  }
+      if (temp < 20) {
+        molasses *= 0.5;
+        bacillus *= 0.5;
+        risk += "水温偏低 → 剂量自动减半，处理延时<br>";
+      }
 
-  if (no2 > 2) {
-    result += `• 亚硝酸盐 ${no2} 偏高 → 维生素C ${no2*100}g，<b>禁用糖蜜48小时</b><br>`;
-  }
-
-  if (temp < 18) {
-    result += `• 水温 ${temp}℃ → ❌ 枯草芽孢杆菌失效！建议使用食盐5kg/亩 + 全天增氧<br>`;
-  } else if (temp < 20) {
-    result += `• 水温 ${temp}℃ 偏低 → 剂量已减半，效果延迟<br>`;
-  }
-
-  if (nh3 > 5 && temp > 28) {
-    result += `<br>⚠️ Biofloc系统溶氧风险：请开启LED灯照明、减投喂30%<br>`;
-    riskIcon = "❗ 高度风险";
-  } else if (nh3 > 2 || no2 > 1) {
-    riskIcon = "⚠️ 中度风险";
-  }
-
-  document.getElementById("output").innerHTML = `${riskIcon}<br>${output}${result}<br>处理ID：${genID()}`;
-}
-
-function genID() {
-  const now = new Date();
-  return now.getFullYear().toString() +
-    (now.getMonth()+1).toString().padStart(2, '0') +
-    now.getDate().toString().padStart(2, '0') + "-" +
-    now.getHours().toString().padStart(2, '0') +
-    now.getMinutes().toString().padStart(2, '0') +
-    now.getSeconds().toString().padStart(2, '0');
-}
-</script>
+      result += `• 氨氮 ${nh3} → 糖蜜 ${molasses.toFixed(0)}g + 枯草芽孢杆菌 ${bacillus.toFixed(0)}g<br>`;
+      if (risk) result += `• ${risk}`;
+      document.getElementById('output').innerHTML = result;
+    }
+  </script>
 </body>
 </html>
