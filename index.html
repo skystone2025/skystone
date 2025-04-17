@@ -1,65 +1,68 @@
-
 <!DOCTYPE html>
 <html lang="zh">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="manifest" href="manifest.json" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="icon" href="icon-192.png" />
   <title>Sky Stone 投料建议助手</title>
   <style>
-    body { font-family: "Microsoft YaHei", sans-serif; margin: 0; padding: 20px; background-color: #fff; }
-    h1 { background: #f1c40f; padding: 10px; text-align: center; }
-    input { font-size: 16px; margin-bottom: 10px; width: 100%; padding: 8px; }
-    button { background-color: #3498db; color: white; padding: 10px; border: none; font-size: 16px; width: 100%; }
-    #result { margin-top: 20px; }
+    body { font-family: "Microsoft YaHei", sans-serif; padding: 20px; background: #fffce8; }
+    .version { text-align: right; color: #888; font-size: 14px; }
+    .risk { font-size: 20px; margin-top: 20px; }
   </style>
 </head>
 <body>
   <h1>Sky Stone 投料建议助手</h1>
-  <div>
-    <label>pH 值：<input type="number" step="0.01" id="ph" value="9.2" /></label><br />
-    <label>氨氮 NH₃ (mg/L)：<input type="number" step="0.01" id="nh3" value="5" /></label><br />
-    <label>亚硝酸盐 NO₂⁻ (mg/L)：<input type="number" step="0.01" id="no2" value="0.5" /></label><br />
-    <label>水温 (°C)：<input type="number" step="0.1" id="temp" value="28" /></label><br />
-    <button onclick="generateAdvice()">生成投料建议</button>
-    <div id="result"></div>
-  </div>
+  <div class="version">版本：v3.4.1</div>
+  <label>pH 值：<input id="ph" type="number" step="0.1" value="7.0" /></label><br/>
+  <label>氨氮 NH₃：<input id="nh3" type="number" step="0.1" value="2.0" /></label><br/>
+  <label>亚硝酸盐 NO₂⁻：<input id="no2" type="number" step="0.1" value="0.5" /></label><br/>
+  <label>水温 ℃：<input id="temp" type="number" step="0.1" value="28" /></label><br/><br/>
+  <button onclick="calculate()">生成投料建议</button>
+  <div id="result" class="risk"></div>
 
-  <script>
-    function generateAdvice() {
-      const ph = parseFloat(document.getElementById("ph").value);
-      const nh3 = parseFloat(document.getElementById("nh3").value);
-      const no2 = parseFloat(document.getElementById("no2").value);
-      const temp = parseFloat(document.getElementById("temp").value);
-      const time = new Date().toLocaleString("zh-CN");
+<script>
+function calculate() {
+  const ph = parseFloat(document.getElementById('ph').value);
+  const nh3 = parseFloat(document.getElementById('nh3').value);
+  const no2 = parseFloat(document.getElementById('no2').value);
+  const temp = parseFloat(document.getElementById('temp').value);
 
-      let result = `<h3>【Sky Stone 投料建议】</h3><p>时间：${time}</p>`;
-      let risk = "✅ 正常";
+  const time = new Date().toLocaleString('zh-CN');
+  let result = `【Sky Stone 投料建议】<br/>时间：${time}<br/><br/>`;
+  let riskIcon = "✅ 正常";
 
-      if (nh3 > 4 || no2 > 2) {
-        risk = "❗ 高度风险";
-      } else if (nh3 > 2 || no2 > 1) {
-        risk = "⚠️ 中度风险";
-      }
+  if (ph > 8.5) {
+    result += "❗ pH 过高！禁止投菌。建议换水50% + 醋酸300ml/亩<br/>";
+    result += "⚠️ 当前环境危险，请先降低 pH 后再进行处理。";
+    document.getElementById('result').innerHTML = result;
+    return;
+  }
 
-      result = `<h3>${risk}</h3>` + result;
+  let factor = (temp < 20) ? 0.5 : 1.0;
 
-      if (nh3 > 2) {
-        const sugar = nh3 * 300;
-        const bacillus = nh3 * 40;
-        result += `<p>• 氨氮 ${nh3} 偏高，建议加糖蜜 ${sugar}g，枯草芽孢杆菌 ${bacillus}g</p>`;
-      }
-      if (no2 > 1) {
-        const vc = no2 * 100;
-        result += `<p>• 亚硝酸盐 ${no2} 偏高，建议加维生素C ${vc}g</p>`;
-      }
-      if (temp > 32) {
-        result += `<p>• 温度 ${temp}℃ 较高，建议加维生素C 100g 增强抗应激</p>`;
-      }
+  if (nh3 > 2) {
+    result += `• 氨氮 ${nh3} 偏高 → 糖蜜 ${nh3*300*factor}g + 枯草芽孢杆菌 ${nh3*40*factor}g<br/>`;
+  }
 
-      document.getElementById("result").innerHTML = result;
-    }
-  </script>
+  if (no2 > 2) {
+    result += `• 亚硝酸盐 ${no2} 偏高 → 建议维生素C ${no2*100}g，48小时内禁用糖蜜<br/>`;
+  }
+
+  if (temp < 20) {
+    result += `• 水温 ${temp}℃ 偏低 → 投料剂量已自动减半，处理时间延长<br/>`;
+  }
+
+  if ((nh3 > 4 || no2 > 2) && temp < 20) {
+    riskIcon = "❗ 高度风险";
+  } else if (nh3 > 2 || no2 > 1) {
+    riskIcon = "⚠️ 中度风险";
+  }
+
+  result = `${riskIcon}<br/>` + result;
+  document.getElementById('result').innerHTML = result;
+}
+</script>
 </body>
 </html>
