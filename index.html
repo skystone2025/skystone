@@ -1,1 +1,77 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>SkyStone</title></head><body><h1>Sky Stone Feed</h1><script src='feed.js'></script></body></html>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Sky Stone 投料建议助手</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+            background-color: #ffffff;
+        }
+        header {
+            background-color: #fcd200;
+            padding: 12px 0;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #000000;
+        }
+        main {
+            padding: 20px;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-size: 16px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        #result {
+            margin-top: 30px;
+            font-size: 16px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header>Sky Stone 投料建议助手</header>
+    <main>
+        <label for="do">DO容氧量：</label>
+        <input type="number" id="do">
+
+        <label for="ph">pH 值：</label>
+        <input type="number" id="ph">
+
+        <label for="nh3">氨氮NH，（mg/L）：</label>
+        <input type="number" id="nh3">
+
+        <label for="no2">亚硝酸盐 NO；（mg/L）：</label>
+        <input type="number" id="no2">
+
+        <label for="temp">水温 （°C）：</label>
+        <input type="number" id="temp">
+
+        <button onclick="generateAdvice()">生成投料建议</button>
+        <div id="result"></div>
+    </main>
+    <script src="feed.js"></script>
+</body>
+</html>
