@@ -1,1 +1,1 @@
-self.addEventListener('fetch', function(event) {});
+// Service worker to enable offline usage of SkyStone Feed
