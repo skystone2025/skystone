@@ -1,10 +1,10 @@
 {
-  "name": "SkyStone",
+  "name": "SkyStone Feed",
   "short_name": "SkyStone",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#FFD500",
+  "theme_color": "#FFD700",
   "icons": [
     {
       "src": "icon-192.png",
