@@ -30,11 +30,8 @@ function generateAdvice() {
         riskLevel = "❗ 高度风险";
     }
 
-    // 建议量（简单举例，后续可按需换算）
     let molasses = 2000;
     let bacillus = 300;
-
-    // 模拟鱼苗模式路径自动识别逻辑（假设路径包含 fry）
     if (window.location.href.includes("fry")) {
         molasses *= 0.7;
         bacillus *= 0.7;
@@ -42,16 +39,13 @@ function generateAdvice() {
     }
 
     messages.push(`推荐使用：糖蜜 ${Math.round(molasses)}g，枯草芽孢杆菌 ${Math.round(bacillus)}g`);
-
-    // 创建唯一处理编号
     const now = new Date();
-    const timestamp = now.getFullYear().toString() +
-        String(now.getMonth() + 1).padStart(2, '0') +
-        String(now.getDate()).padStart(2, '0') + "-" +
-        String(now.getHours()).padStart(2, '0') +
-        String(now.getMinutes()).padStart(2, '0') +
-        String(now.getSeconds()).padStart(2, '0');
-    messages.push("\n处理ID：" + timestamp);
-
+    const id = now.getFullYear().toString() +
+        String(now.getMonth()+1).padStart(2,'0') +
+        String(now.getDate()).padStart(2,'0') + "-" +
+        String(now.getHours()).padStart(2,'0') +
+        String(now.getMinutes()).padStart(2,'0') +
+        String(now.getSeconds()).padStart(2,'0');
+    messages.push("\n处理ID：" + id);
     result.textContent = riskLevel + "\n\n" + messages.join("\n");
 }

@@ -1,79 +1,81 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <title>Sky Stone 投料建议助手</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Microsoft YaHei', sans-serif;
-            background-color: #ffffff;
-        }
-        header {
-            background-color: #fcd200;
-            padding: 14px 0;
-            text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-            color: #000;
-        }
-        main {
-            padding: 24px;
-        }
-        label {
-            font-size: 16px;
-            display: block;
-            margin-top: 18px;
-        }
-        input {
-            width: 100%;
-            font-size: 16px;
-            padding: 10px;
-            margin-top: 6px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 18px;
-            border-radius: 4px;
-            margin-top: 30px;
-        }
-        #result {
-            margin-top: 30px;
-            font-size: 16px;
-            white-space: pre-wrap;
-            line-height: 1.6;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sky Stone 投料建议助手</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#fcd200" />
+  <link rel="icon" href="icon-192.png" />
+  <script src="feed.js" defer></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Microsoft YaHei', sans-serif;
+      background: #fff;
+    }
+    header {
+      background: #fcd200;
+      padding: 16px 0;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: #000;
+    }
+    main {
+      padding: 24px;
+    }
+    label {
+      display: block;
+      margin: 16px 0 6px;
+      font-size: 16px;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      background: #007bff;
+      color: #fff;
+      padding: 16px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 28px;
+    }
+    #result {
+      margin-top: 30px;
+      font-size: 16px;
+      white-space: pre-wrap;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
-    <header>Sky Stone 投料建议助手</header>
-    <main>
-        <label>DO容氧量：</label>
-        <input type="number">
-
-        <label>pH 值：</label>
-        <input type="number">
-
-        <label>氨氮NH，（mg/L）：</label>
-        <input type="number">
-
-        <label>亚硝酸盐 NO；（mg/L）：</label>
-        <input type="number">
-
-        <label>水温 （°C）：</label>
-        <input type="number">
-
-        <button>生成投料建议</button>
-
-        <div id="result">
-            （这里将显示建议内容...）
-        </div>
-    </main>
+  <header>Sky Stone 投料建议助手</header>
+  <main>
+    <label>DO容氧量：</label>
+    <input id="do" type="number" />
+    <label>pH 值：</label>
+    <input id="ph" type="number" />
+    <label>氨氮NH，（mg/L）：</label>
+    <input id="nh3" type="number" />
+    <label>亚硝酸盐 NO；（mg/L）：</label>
+    <input id="no2" type="number" />
+    <label>水温 （°C）：</label>
+    <input id="temp" type="number" />
+    <button onclick="generateAdvice()">生成投料建议</button>
+    <div id="result">（这里将显示建议内容...）</div>
+  </main>
 </body>
 </html>
