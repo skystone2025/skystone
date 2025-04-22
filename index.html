@@ -1,21 +1,48 @@
 
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SkyStone v3.6</title>
-  <link rel="manifest" href="manifest.json"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyStone Feed v3.5</title>
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    .header { background: #FFD700; padding: 10px; text-align: center; font-weight: bold; font-size: 20px; }
+    .version { text-align: center; margin-bottom: 10px; font-size: 14px; color: #444; }
+    .container { padding: 20px; }
+    label { display: block; margin-top: 10px; }
+    input { width: 100%; padding: 8px; font-size: 16px; }
+    .range { font-size: 12px; color: gray; float: right; margin-top: -20px; }
+    .result { margin-top: 20px; }
+    .btn { width: 100%; padding: 12px; background: #007BFF; color: white; font-size: 18px; border: none; cursor: pointer; margin-top: 20px; }
+    .status { margin-top: 20px; font-size: 16px; }
+  </style>
 </head>
 <body>
-  <div style="background:yellow;text-align:center;padding:10px;font-weight:bold;">SKY STONE<br><span style="font-weight:normal;">v3.6</span></div>
-  <label>水温（℃） <span>正常范围：26–30</span><input id="temp"/></label><br>
-  <label>氨氮 NH（mg/L） <span>正常范围：< 0.5</span><input id="nh3"/></label><br>
-  <label>亚硝酸盐 NO（mg/L） <span>正常范围：< 0.1</span><input id="no2"/></label><br>
-  <label>酸碱度 pH <span>正常范围：7.0–8.5</span><input id="ph"/></label><br>
-  <label>溶解氧 DO（mg/L） <span>正常范围：4–6</span><input id="do"/></label><br><br>
-  <button onclick="generateAdvice()">生成建议</button>
-  <div id="output"></div>
+  <div class="header">SKY STONE</div>
+  <div class="version">v3.5</div>
+  <div class="container">
+    <label>水温（°C） <span class="range">正常范围：26–30</span></label>
+    <input id="tempInput" type="number" value="26" />
+
+    <label>氨氮 NH (mg/L) <span class="range">正常范围：＜0.5</span></label>
+    <input id="nhInput" type="number" value="1.17" />
+
+    <label>亚硝酸盐 NO (mg/L) <span class="range">正常范围：＜0.1</span></label>
+    <input id="noInput" type="number" value="0.019" />
+
+    <label>酸碱度 pH <span class="range">正常范围：7.0–8.5</span></label>
+    <input id="phInput" type="number" value="6.82" step="0.01" />
+
+    <label>溶解氧 DO (mg/L) <span class="range">正常范围：4–6</span></label>
+    <input id="doInput" type="number" value="14.83" />
+
+    <button class="btn" onclick="generateAdvice()">生成建议</button>
+
+    <div id="output" class="result"></div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>
