@@ -21,15 +21,6 @@
       width: 100%; padding: 12px; margin: 5px 0; 
       border: 2px solid #ddd; border-radius: 8px; font-size: 16px;
     }
-    input:invalid {
-      border-color: #ff4444 !important;
-      animation: shake 0.5s;
-    }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
-    }
     button {
       background: #007bff; color: white; border: none;
       padding: 15px; margin: 20px 0; width: 100%;
@@ -39,7 +30,30 @@
       background: white; padding: 15px; 
       border-radius: 8px; margin-top: 15px;
     }
-    .emergency { color: var(--danger); font-weight: bold; }
+    .emergency {
+      background: #ffeeee;
+      border-left: 4px solid red;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    .history-item {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    .warn-tag {
+      background: #ff4444;
+      color: white;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+    .ok-tag {
+      background: #00aa00;
+      color: white;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
@@ -47,37 +61,28 @@
     <h1>智能养殖助手</h1>
     <div>v4.0 移动专业版</div>
   </div>
-
   <select id="mode">
     <option value="water">养水模式</option>
     <option value="fish">养鱼模式（5600尾泰国红罗非）</option>
   </select>
-
   <label>水温 (°C) <span class="range">正常范围：26~30</span></label>
-  <input id="temp" type="number" step="0.1" required placeholder="请输入水温">
-
+  <input id="temp" type="number" step="0.1">
   <label>氨氮 NH₃ (mg/L) <span class="range">安全值：< 0.5</span></label>
-  <input id="nh3" type="number" step="0.01" required placeholder="请输入氨氮值">
-
+  <input id="nh3" type="number" step="0.01">
   <label>亚硝酸盐 NO₂ (mg/L) <span class="range">安全值：< 0.1</span></label>
-  <input id="no2" type="number" step="0.01" required placeholder="请输入亚硝酸盐">
-
+  <input id="no2" type="number" step="0.01">
   <label>pH值 <span class="range">正常范围：7.0~8.5</span></label>
-  <input id="ph" type="number" step="0.1" required placeholder="请输入pH值">
-
+  <input id="ph" type="number" step="0.1">
   <label>溶解氧 DO (mg/L) <span class="range">正常范围：4~6</span></label>
-  <input id="do" type="number" step="0.1" required placeholder="请输入溶解氧">
-
+  <input id="do" type="number" step="0.1">
   <button onclick="generateAdvice()">生成建议</button>
   <button onclick="loadMoreHistory()">📅 加载历史记录</button>
-
   <div class="output-panel" id="output">
     <div style="color:#666; text-align:center;">
       <p>请填写所有水质参数后点击按钮</p>
     </div>
   </div>
   <div id="history"></div>
-
   <script src="./app.js"></script>
 </body>
 </html>
