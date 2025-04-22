@@ -1,83 +1,52 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>智能养殖助手 v4.0</title>
-  <link rel="manifest" href="./manifest.json">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>智能养殖助手 · 终极版</title>
   <style>
-    :root { --primary: #FFD700; --danger: #ff4444; }
-    body {
-      font-family: -apple-system, "HarmonyOS Sans", "Microsoft YaHei", sans-serif;
-      margin: 0; padding: 10px; background: #f5f5f5;
-    }
-    .header {
-      background: var(--primary); padding: 12px; 
-      text-align: center; border-radius: 8px; margin-bottom: 15px;
-    }
-    label { display: block; margin-top: 15px; font-weight: bold; }
-    .range { font-size: 12px; color: #666; float: right; }
+    body { font-family: -apple-system, sans-serif; padding: 16px; background: #f5f5f5; }
+    h1 { background: #ffd700; padding: 10px; border-radius: 8px; text-align: center; }
+    label { display: block; margin-top: 12px; font-weight: bold; }
     input, select {
-      width: 100%; padding: 12px; margin: 5px 0; 
-      border: 2px solid #ddd; border-radius: 8px; font-size: 16px;
+      width: 100%; padding: 10px; font-size: 16px; margin-top: 5px;
+      border: 1px solid #ccc; border-radius: 6px;
     }
     button {
-      background: #007bff; color: white; border: none;
-      padding: 15px; margin: 20px 0; width: 100%;
-      border-radius: 8px; font-size: 17px; font-weight: bold;
+      width: 100%; padding: 14px; margin-top: 20px;
+      background: #007bff; color: white; border: none; border-radius: 6px; font-size: 16px;
     }
-    .output-panel {
-      background: white; padding: 15px; 
-      border-radius: 8px; margin-top: 15px;
-    }
-    .emergency {
-      background: #ffeeee;
-      border-left: 4px solid red;
-      padding: 10px;
-      margin: 10px 0;
-    }
-    input[type="number"] {
-      -moz-appearance: textfield;
-    }
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
+    .output { margin-top: 20px; background: white; padding: 15px; border-radius: 8px; }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>智能养殖助手</h1>
-    <div>v4.0 移动专业版</div>
-  </div>
+  <h1>智能养殖助手 · 终极版</h1>
 
+  <label>当前模式</label>
   <select id="mode">
-    <option value="water">养水模式</option>
-    <option value="fish">养鱼模式（5600尾泰国红罗非）</option>
+    <option value="WATER_CULTURE">养水模式</option>
+    <option value="FISH_FARMING">养鱼模式</option>
   </select>
 
-  <label>水温 (°C) <span class="range">正常范围：26~30</span></label>
-  <input id="temp" type="number" step="0.1" placeholder="请输入水温">
+  <label>水温 (temp)</label>
+  <input id="temp" type="number" placeholder="单位：℃" />
 
-  <label>氨氮 NH₃ (mg/L) <span class="range">安全值：< 0.5</span></label>
-  <input id="nh3" type="number" step="0.01" placeholder="请输入氨氮值">
+  <label>氨氮 (nh3)</label>
+  <input id="nh3" type="number" placeholder="单位：mg/L" />
 
-  <label>亚硝酸盐 NO₂ (mg/L) <span class="range">安全值：< 0.1</span></label>
-  <input id="no2" type="number" step="0.01" placeholder="请输入亚硝酸盐">
+  <label>亚硝酸盐 (no2)</label>
+  <input id="no2" type="number" placeholder="单位：mg/L" />
 
-  <label>pH值 <span class="range">正常范围：7.0~8.5</span></label>
-  <input id="ph" type="number" step="0.1" placeholder="请输入pH值">
+  <label>pH 值</label>
+  <input id="ph" type="number" placeholder="范围建议：6.8 - 8.5" />
 
-  <label>溶解氧 DO (mg/L) <span class="range">正常范围：4~6</span></label>
-  <input id="do" type="number" step="0.1" placeholder="请输入溶解氧">
+  <label>溶解氧 DO</label>
+  <input id="do" type="number" placeholder="单位：mg/L" />
 
-  <button onclick="generateAdvice()">生成建议</button>
-  <button onclick="loadMoreHistory()">📅 加载历史记录</button>
+  <button onclick="run()">生成建议</button>
 
-  <div class="output-panel" id="output">请填写所有水质参数后点击按钮</div>
-  <div id="history"></div>
+  <div class="output" id="output">等待输入...</div>
 
-  <script src="./app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
