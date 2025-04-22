@@ -1,33 +1,43 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>智能养殖助手 v4.0</title>
-  <link rel="manifest" href="./manifest.json" />
+  <link rel="manifest" href="./manifest.json">
   <style>
     :root { --primary: #FFD700; --danger: #ff4444; }
     body {
       font-family: -apple-system, "HarmonyOS Sans", "Microsoft YaHei", sans-serif;
-      background: #f5f5f5; padding: 10px; margin: 0;
+      margin: 0; padding: 10px; background: #f5f5f5;
     }
     .header {
-      background: var(--primary);
-      padding: 15px;
-      text-align: center;
-      border-radius: 10px;
-      margin-bottom: 15px;
+      background: var(--primary); padding: 12px; 
+      text-align: center; border-radius: 8px; margin-bottom: 15px;
     }
-    select, input {
-      width: 100%; padding: 12px; margin: 8px 0;
-      border: 1px solid #ddd; border-radius: 8px; font-size: 16px;
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    .range { font-size: 12px; color: #666; float: right; }
+    input, select {
+      width: 100%; padding: 12px; margin: 5px 0; 
+      border: 2px solid #ddd; border-radius: 8px; font-size: 16px;
+    }
+    input:invalid {
+      border-color: #ff4444 !important;
+      animation: shake 0.5s;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
     }
     button {
       background: #007bff; color: white; border: none;
-      padding: 15px; margin: 10px 0; border-radius: 8px; width: 100%; font-size: 17px;
+      padding: 15px; margin: 20px 0; width: 100%;
+      border-radius: 8px; font-size: 17px; font-weight: bold;
     }
-    #output, #history {
-      background: white; padding: 15px; border-radius: 8px; margin-top: 15px;
+    .output-panel {
+      background: white; padding: 15px; 
+      border-radius: 8px; margin-top: 15px;
     }
     .emergency { color: var(--danger); font-weight: bold; }
   </style>
@@ -43,12 +53,29 @@
     <option value="fish">养鱼模式（5600尾泰国红罗非）</option>
   </select>
 
-  <input id="ph" type="number" step="0.1" placeholder="输入pH值（范围7.0-8.5）" inputmode="decimal" />
+  <label>水温 (°C) <span class="range">正常范围：26~30</span></label>
+  <input id="temp" type="number" step="0.1" required placeholder="请输入水温">
+
+  <label>氨氮 NH₃ (mg/L) <span class="range">安全值：< 0.5</span></label>
+  <input id="nh3" type="number" step="0.01" required placeholder="请输入氨氮值">
+
+  <label>亚硝酸盐 NO₂ (mg/L) <span class="range">安全值：< 0.1</span></label>
+  <input id="no2" type="number" step="0.01" required placeholder="请输入亚硝酸盐">
+
+  <label>pH值 <span class="range">正常范围：7.0~8.5</span></label>
+  <input id="ph" type="number" step="0.1" required placeholder="请输入pH值">
+
+  <label>溶解氧 DO (mg/L) <span class="range">正常范围：4~6</span></label>
+  <input id="do" type="number" step="0.1" required placeholder="请输入溶解氧">
 
   <button onclick="generateAdvice()">生成建议</button>
-  <button onclick="loadMoreHistory()">加载历史记录</button>
+  <button onclick="loadMoreHistory()">📅 加载历史记录</button>
 
-  <div id="output">等待操作...</div>
+  <div class="output-panel" id="output">
+    <div style="color:#666; text-align:center;">
+      <p>请填写所有水质参数后点击按钮</p>
+    </div>
+  </div>
   <div id="history"></div>
 
   <script src="./app.js"></script>

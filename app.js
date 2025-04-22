@@ -1,1 +1,1 @@
-window.generateAdvice = function() { console.log('已加载逻辑'); }; window.loadMoreHistory = function() { console.log('加载历史记录'); };
+// 请使用完整逻辑代码填充此文件
