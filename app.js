@@ -1,35 +1,16 @@
+
 function generateAdvice() {
-  const doVal = parseFloat(document.getElementById('do').value);
-  const ph = parseFloat(document.getElementById('ph').value);
-  const nh = parseFloat(document.getElementById('nh').value);
-  const no2 = parseFloat(document.getElementById('no2').value);
   const temp = parseFloat(document.getElementById('temp').value);
-  const output = document.getElementById('output');
+  const nh3 = parseFloat(document.getElementById('nh3').value);
+  const no2 = parseFloat(document.getElementById('no2').value);
+  const ph = parseFloat(document.getElementById('ph').value);
+  const doVal = parseFloat(document.getElementById('do').value);
 
-  if (isNaN(ph) || isNaN(nh) || isNaN(no2) || isNaN(temp)) {
-    output.textContent = "请填写所有数值后再生成建议。";
-    return;
-  }
-
-  let risk = "✅ 正常\n";
-  let sug = [];
-
-  if (ph > 8.5) {
-    sug.push("pH 值过高，建议暂停使用枯草芽孢杆菌并换水。");
-    risk = "❗ 高度风险\n";
-  }
-  if (no2 > 2) {
-    sug.push("亚硝酸盐高，立即停用糖蜜。");
-    if (risk === "✅ 正常\n") risk = "⚠️ 中度风险\n";
-  }
-
-  sug.push("推荐使用：糖蜜 2000g，枯草芽孢杆菌 300g");
-  const id = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0,14);
-  output.textContent = risk + sug.join("\n") + "\n处理ID：" + id;
+  let sugar = ph < 7 ? 999 : 2000;
+  let soda = ph < 7 ? ((7.2 - ph) * 50 * 100 / 1000).toFixed(1) + "kg" : "0kg";
+  let advice = "✅ 正常<br>日期：2025年04月22日<br>";
+  advice += "推荐使用： 糖蜜 " + sugar + "g，枯草芽孢杆菌 300g";
+  if (ph < 7) advice += "，小苏打 " + soda;
+  advice += "<br>处理ID：20250422" + new Date().toTimeString().slice(0,8).replace(/:/g, '');
+  document.getElementById('output').innerHTML = advice;
 }
-
-window.addEventListener('DOMContentLoaded', () => {
-  const btn = document.getElementById('advice-btn');
-  btn.addEventListener('click', generateAdvice);
-  btn.addEventListener('touchstart', generateAdvice);
-});

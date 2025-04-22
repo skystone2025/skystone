@@ -1,10 +1,11 @@
+
 {
-  "name": "Sky Stone Feed",
+  "name": "SkyStone",
   "short_name": "SkyStone",
-  "start_url": "./index.html",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#FFD700",
+  "description": "SkyStone 投料建议助手",
   "icons": [
     {
       "src": "./icon-192.png",
