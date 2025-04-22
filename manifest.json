@@ -1,11 +1,11 @@
-
 {
-  "name": "SkyStone Feed",
-  "short_name": "SkyStone",
+  "name": "智能养殖助手",
+  "short_name": "养殖助手",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#FFD700",
-  "theme_color": "#FFD700",
+  "theme_color": "#007bff",
   "icons": [
     {
       "src": "./icon-192.png",
@@ -17,5 +17,6 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "orientation": "portrait"
 }
