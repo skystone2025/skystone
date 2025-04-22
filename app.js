@@ -1,1 +1,1 @@
-// placeholder app.js logic - full logic to be restored
+window.generateAdvice = function() { console.log('已加载逻辑'); }; window.loadMoreHistory = function() { console.log('加载历史记录'); };
