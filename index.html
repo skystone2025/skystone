@@ -3,63 +3,46 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>Sky Stone 投料建议助手</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyStone Feed</title>
+  <link rel="manifest" href="./manifest.json">
   <style>
     body { font-family: "Microsoft YaHei", sans-serif; margin: 0; padding: 0; background: #fff; }
-    .header { background: #FFD700; color: black; padding: 10px; font-size: 20px; text-align: center; font-weight: bold; }
+    .header { background: #FFD700; padding: 12px; text-align: center; font-size: 20px; font-weight: bold; }
     .container { padding: 20px; }
-    .row { margin-bottom: 15px; }
-    .label { display: block; font-size: 18px; margin-bottom: 5px; }
-    .normal-range { font-size: 14px; color: gray; float: right; }
-    input[type="text"] { width: 100%; padding: 8px; font-size: 16px; box-sizing: border-box; }
-    .button { background: #007BFF; color: white; border: none; padding: 12px; width: 100%; font-size: 18px; cursor: pointer; margin-top: 20px; }
+    .row { margin-bottom: 16px; }
+    .label { font-size: 16px; margin-bottom: 4px; display: flex; justify-content: space-between; }
+    .input { width: 100%; padding: 8px; font-size: 16px; }
+    button { width: 100%; padding: 12px; font-size: 18px; background: #007BFF; color: white; border: none; margin-top: 20px; }
     .result { margin-top: 20px; font-size: 16px; }
   </style>
 </head>
 <body>
-  <div class="header">Sky Stone 投料建议助手</div>
+  <div class="header">SkyStone 投料建议助手</div>
   <div class="container">
     <div class="row">
-      <label class="label">水温（℃） <span class="normal-range">正常范围：26-30</span></label>
-      <input type="text" id="temp">
+      <label class="label">水温（℃）<span>正常范围：26-30</span></label>
+      <input id="temp" class="input">
     </div>
     <div class="row">
-      <label class="label">氨氮 NH（mg/L） <span class="normal-range">正常范围：&lt; 0.5</span></label>
-      <input type="text" id="nh">
+      <label class="label">氨氮 NH（mg/L）<span>正常范围：< 0.5</span></label>
+      <input id="nh" class="input">
     </div>
     <div class="row">
-      <label class="label">亚硝酸盐 NO（mg/L） <span class="normal-range">正常范围：&lt; 0.1</span></label>
-      <input type="text" id="no">
+      <label class="label">亚硝酸盐 NO（mg/L）<span>正常范围：< 0.1</span></label>
+      <input id="no2" class="input">
     </div>
     <div class="row">
-      <label class="label">酸碱度 pH <span class="normal-range">正常范围：7.0-8.5</span></label>
-      <input type="text" id="ph">
+      <label class="label">酸碱度 pH<span>正常范围：7.0-8.5</span></label>
+      <input id="ph" class="input">
     </div>
     <div class="row">
-      <label class="label">溶解氧 DO（mg/L） <span class="normal-range">正常范围：4-6</span></label>
-      <input type="text" id="do">
+      <label class="label">溶解氧 DO（mg/L）<span>正常范围：4-6</span></label>
+      <input id="do" class="input">
     </div>
-    <button class="button" onclick="generate()">生成建议</button>
+    <button onclick="generate()">生成建议</button>
     <div class="result" id="result"></div>
   </div>
-
-  <script>
-    function generate() {
-      const temp = document.getElementById("temp").value;
-      const ph = document.getElementById("ph").value;
-      const nh = document.getElementById("nh").value;
-      const no = document.getElementById("no").value;
-      const doVal = document.getElementById("do").value;
-      const id = new Date().toISOString().replace(/[-T:.Z]/g, "").slice(0, 14);
-
-      const result = `
-        ✅ 正常<br>
-        推荐使用：糖蜜 2000g，枯草芽孢杆菌 300g<br>
-        处理ID：${id}
-      `;
-      document.getElementById("result").innerHTML = result;
-    }
-  </script>
+  <script src="./app.js"></script>
 </body>
 </html>
