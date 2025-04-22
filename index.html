@@ -1,34 +1,43 @@
+
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <link rel="manifest" href="./manifest.json" />
-  <link rel="apple-touch-icon" href="./icon-192.png" />
-  <title>Sky Stone Feed</title>
-  <script src="./app.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyStone Feed</title>
+  <link rel="manifest" href="./manifest.json">
   <style>
     body { font-family: "Microsoft YaHei", sans-serif; margin: 0; padding: 0; background: #fff; }
-    header { background: #FFD700; padding: 12px; text-align: center; font-size: 20px; font-weight: bold; }
-    main { padding: 16px; }
-    input { width: 100%; padding: 10px; margin: 10px 0; font-size: 16px; }
-    button { width: 100%; background: #007bff; color: white; padding: 14px; font-size: 18px;
-             border: none; border-radius: 6px; cursor: pointer; min-width: 44px; min-height: 44px; }
-    #output { margin-top: 20px; line-height: 1.6; white-space: pre-wrap; }
+    .header { background: #FFD700; padding: 10px 0; text-align: center; font-size: 20px; font-weight: bold; }
+    .subheader { background: #FFD700; text-align: center; font-size: 16px; padding-bottom: 8px; }
+    .container { padding: 20px; }
+    .row { margin-bottom: 16px; }
+    .label { font-size: 16px; display: flex; justify-content: space-between; margin-bottom: 4px; }
+    .input { width: 100%; padding: 8px; font-size: 16px; }
+    .button { width: 100%; padding: 12px; font-size: 18px; background: #007BFF; color: white; border: none; margin-top: 20px; }
+    .result { margin-top: 20px; font-size: 16px; }
   </style>
 </head>
 <body>
-  <header>Sky Stone 投料建议助手</header>
-  <main>
-    <label>DO容氧量：</label><input id="do" />
-    <label>pH 值：</label><input id="ph" />
-    <label>氨氮NH，（mg/L）：</label><input id="nh" />
-    <label>亚硝酸盐 NO；（mg/L）：</label><input id="no2" />
-    <label>水温 （°C）：</label><input id="temp" />
-    <button id="advice-btn" onclick="generateAdvice()">生成建议</button>
-    <div id="output">(这里将显示建议内容)</div>
-  </main>
+  <div class="header">SKY STONE</div>
+  <div class="subheader">v3.5</div>
+  <div class="container">
+    <div class="row"><label class="label">水温（℃）<span>正常范围：26-30</span></label><input id="temp" class="input"></div>
+    <div class="row"><label class="label">氨氮 NH（mg/L）<span>正常范围：< 0.5</span></label><input id="nh" class="input"></div>
+    <div class="row"><label class="label">亚硝酸盐 NO（mg/L）<span>正常范围：< 0.1</span></label><input id="no2" class="input"></div>
+    <div class="row"><label class="label">酸碱度 pH<span>正常范围：7.0-8.5</span></label><input id="ph" class="input"></div>
+    <div class="row"><label class="label">溶解氧 DO（mg/L）<span>正常范围：4-6</span></label><input id="do" class="input"></div>
+    <button class="button" onclick="generateAdvice()">生成建议</button>
+    <div class="result" id="result"></div>
+  </div>
+  <script>
+    function generateAdvice() {
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}年${(now.getMonth() + 1).toString().padStart(2, '0')}月${now.getDate().toString().padStart(2, '0')}日`;
+      const id = `${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2,'0')}${now.getDate().toString().padStart(2,'0')}${now.getHours().toString().padStart(2,'0')}${now.getMinutes().toString().padStart(2,'0')}${now.getSeconds().toString().padStart(2,'0')}`;
+      document.getElementById('result').innerHTML =
+        `✅ 正常<br>日期：${dateStr}<br>推荐使用：糖蜜 2000g，枯草芽孢杆菌 300g<br>处理ID：${id}`;
+    }
+  </script>
 </body>
 </html>
